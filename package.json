@@ -18,8 +18,7 @@
     "start": "electron .",
     "build-mac": "electron-packager ./package Mockster --ignore=dist --out=dist/osx --platform=darwin --arch=x64 --version=0.28.2",
     "build-win": "electron-packager ./package Mockster --ignore=dist --out=dist/win --platform=win32 --arch=x64 --version=0.28.2",
-    "build-lnx": "electron-packager ./package Mockster --ignore=dist --out=dist/lnx --platform=linux --arch=x64 --version=0.28.2",
-    "build": "npm run-script build-mac && npm run-script build-win && npm run-script build-lnx"
+    "build": "npm run-script build-mac && npm run-script build-win"
   },
   "files": [
     "index.js",
