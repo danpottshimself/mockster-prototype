@@ -1,20 +1,64 @@
 <!doctype html>
 <html ng-app="Tombola.Mockster">
-	<head>
-		<meta charset="utf-8">
-		<title>Mocktster</title>
-		<link rel="stylesheet" href="index.css">
-		<script type="application/javascript" src="bower_components/angular/angular.min.js"></script>
-		<script type="text/javascript" src="scripts/app.js"></script>
-	</head>
-	<body ng-controller="MocksterController">
-		<div class="container">
-			<header>
-				<h1>Mock*</h1>
-				<h2>{{mocksterService.foo}}</h2>
-			</header>
-			<section class="main"></section>
-			<footer></footer>
-		</div>
-	</body>
+<head>
+	<meta charset="utf-8">
+	<title>Mocktster</title>
+	<link rel="stylesheet" href="index.css">
+	<link href="node_modules/jsoneditor/dist/jsoneditor.min.css" rel="stylesheet" type="text/css">
+	<script src="node_modules/jsoneditor/dist/jsoneditor.min.js"></script>
+	<script type="application/javascript" src="bower_components/angular/angular.min.js"></script>
+	<script type="text/javascript" src="package/scripts/app.js"></script>
+	<link href="bower_components/angular-xeditable/dist/css/xeditable.css" rel="stylesheet">
+	<script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
+</head>
+<body ng-controller="MocksterController">
+<div id="jsoneditor" style="width: 300px; height: 578px;"></div>
+<script>
+	var container = document.getElementById("jsoneditor");
+	var fs = require('fs');
+	var options = {
+		mode: 'tree'
+	};
+	var body = 'auth is a real thing';
+	var test = /auth/g
+	var editor = new JSONEditor(container, options);
+	function setJSON () {
+		if(body.match("\bauth\b")){
+			alert('test');
+		}
+		var json = require(__dirname + "/server/games/gameLib.json");
+		editor.set(json);
+	}
+	var saveBackUp = function(){
+		var current = JSON.stringify(require(__dirname + "/server/games/gameLib.json"));
+		var date = new Date();
+		var day = date.getDate();
+		var month = date.getMonth();
+		var year = date.getYear();
+		var dateString = "".concat(day).concat(month).concat(year);
+		fs.writeFile(__dirname + "/server/games/jsonbackups/" + dateString +".json", current);
+	};
+	function getJSON() {
+		var json = editor.get();
+		var stringJson = JSON.stringify(json);
+		saveBackUp();
+		fs.writeFile(__dirname + "/server/games/gameLib.json", stringJson);
+		alert('Saved Changes');
+	}
+</script>
+<div class="container">
+	<header>
+		<h1>Mock*</h1>
+		<h2>{{mocksterService.foo}}</h2>
+		<button onclick="setJSON();">Load JSON</button>
+		<button onclick="getJSON();">Save</button>
+	</header>
+
+	{{editedFile}}
+	<section class="main">
+	</section>
+	<footer> </footer>
+</div>
+</body>
 </html>
+
